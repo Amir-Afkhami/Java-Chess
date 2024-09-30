@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.image.ImageView?>
+
+<?import java.net.URL?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.GridPane?>
+<VBox id="root" alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.groupproject.javachess.MainController">
+    <HBox id="title-bar" alignment="BASELINE_LEFT" HBox.hgrow="ALWAYS"  fx:id="titlebar" onMousePressed="#onDragStart" onMouseDragged="#onDragged" prefHeight="50" >
+        <ImageView>
+            <Image requestedWidth="50" preserveRatio="true" url="@images/logo.png"/>
+        </ImageView>
+        <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+            <Label id="header" text="Java Chess" />
+        </HBox>
+        <HBox alignment="CENTER_RIGHT">
+            <Button styleClass="menu-btn" id="min-btn" onAction="#onMinimize">
+                <graphic>
+                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@images/dash.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button styleClass="menu-btn" id="max-btn" onAction="#onFullscreen">
+                <graphic>
+
+                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@images/maximize.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button styleClass="menu-btn" id="close-btn" onAction="#onClose">
+                <graphic>
+                    <ImageView fitHeight="37.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@images/close.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+    </HBox>
+    <GridPane fx:id="mainGrid" prefWidth="680" prefHeight="680">
+
+    </GridPane>
+    <stylesheets>
+        <URL value="@main.css" />
+    </stylesheets>
+</VBox>

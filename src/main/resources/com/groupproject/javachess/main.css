@@ -1,0 +1,29 @@
+@font-face {
+    font-family: Bonjour;
+    src: url('fonts/Bonjour.ttf');
+}
+
+#root {
+    -fx-background-color: #EEBD3C;
+}
+
+#title-bar {
+    -fx-background-color: #AD5E25;
+}
+
+#header {
+    -fx-font-size: 25;
+    -fx-font-family: 'Bonjour';
+    -fx-padding: 0 0 5 0;
+    -fx-text-fill: #EEBD3C;
+}
+
+
+
+.menu-btn {
+
+    -fx-background-repeat: no-repeat;
+    -fx-background-color: transparent;
+}
+
+
