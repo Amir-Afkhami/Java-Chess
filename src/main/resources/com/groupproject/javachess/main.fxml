@@ -10,6 +10,7 @@
 <?import java.net.URL?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.StackPane?>
 <VBox id="root" alignment="TOP_CENTER" xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.groupproject.javachess.MainController">
     <HBox id="title-bar" alignment="BASELINE_LEFT" HBox.hgrow="ALWAYS"  fx:id="titlebar" onMousePressed="#onDragStart" onMouseDragged="#onDragged" prefHeight="50" >
@@ -50,9 +51,15 @@
             </Button>
         </HBox>
     </HBox>
-    <GridPane fx:id="mainGrid" prefWidth="680" prefHeight="680">
+    <StackPane>
+        <GridPane fx:id="mainGrid" prefWidth="680" prefHeight="680">
 
-    </GridPane>
+        </GridPane>
+        <GridPane fx:id="gameGrid" prefWidth="680" prefHeight="680">
+
+        </GridPane>
+    </StackPane>
+
     <stylesheets>
         <URL value="@main.css" />
     </stylesheets>

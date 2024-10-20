@@ -11,11 +11,17 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class MainController {
 
     double deltaX = 0;
     double deltaY = 0;
+
+    String[] pieceNames = {"plt", "pdt", "rlt", "rdt", "nlt", "ndt", "blt", "bdt", "klt", "kdt", "qlt", "qdt"};
+    Map<String, Image> pieces = new HashMap<>(12);
 
     @FXML
     private HBox titlebar;
@@ -24,30 +30,58 @@ public class MainController {
     private GridPane mainGrid;
 
     @FXML
+    private GridPane gameGrid;
+
+    @FXML
     private void initialize() {
-        String walnutPath = this.getClass().getResource("images/walnut.png").toExternalForm();
-        String lightPath = this.getClass().getResource("images/finewood.png").toExternalForm();
 
-        Image walnut = new Image(walnutPath);
-        Image light = new Image(lightPath);
+        // Populate Image Map
+        try {
+            for(String name : pieceNames) {
+                String path = Objects.requireNonNull(this.getClass().getResource("images/pieces/" + name + ".png")).toExternalForm();
+                Image img = new Image(path);
 
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if((i + j) % 2 == 0) {
-                    ImageView view = new ImageView(light);
-                    view.setPreserveRatio(true);
-                    view.setFitWidth(85);
-                    view.setFitHeight(85);
-                    mainGrid.add(view, j, i);
-                } else {
-                    ImageView view = new ImageView(walnut);
-                    view.setPreserveRatio(true);
-                    view.setFitWidth(85);
-                    view.setFitHeight(85);
-                    mainGrid.add(view, j, i);
+                pieces.put(name, img);
+            }
+        } catch (NullPointerException e) {
+            System.err.println("[ERROR] Could not retrieve images for chess pieces");
+
+            Stage stage = (Stage) titlebar.getScene().getWindow();
+            stage.close();
+        }
+
+        try {
+            String walnutPath = Objects.requireNonNull(this.getClass().getResource("images/walnut.png")).toExternalForm();
+            String lightPath = Objects.requireNonNull(this.getClass().getResource("images/finewood.png")).toExternalForm();
+
+            Image walnut = new Image(walnutPath);
+            Image light = new Image(lightPath);
+
+            // Assign each cell an image
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if((i + j) % 2 == 0) {
+                        ImageView view = new ImageView(light);
+                        view.setPreserveRatio(true);
+                        view.setFitWidth(85);
+                        view.setFitHeight(85);
+                        mainGrid.add(view, j, i);
+                    } else {
+                        ImageView view = new ImageView(walnut);
+                        view.setPreserveRatio(true);
+                        view.setFitWidth(85);
+                        view.setFitHeight(85);
+                        mainGrid.add(view, j, i);
+                    }
                 }
             }
+        } catch (NullPointerException e) {
+            System.err.println("[ERROR] Could not retrieve images for chess board");
+
+            Stage stage = (Stage) titlebar.getScene().getWindow();
+            stage.close();
         }
+
 
 
     }
