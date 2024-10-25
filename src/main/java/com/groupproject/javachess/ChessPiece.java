@@ -1,31 +1,40 @@
 package com.groupproject.javachess;
 
+import javafx.scene.image.Image;
+
+import java.util.Objects;
+
 public abstract class ChessPiece {
     public ChessType type;
+    // false = white and true = black
+    protected boolean isBlack;
+    protected String imgPath;
 
-    int x, y;
-    boolean side;
+    public abstract int[][] getMoves();
 
-    public abstract int[][] getMoves(ChessPiece[] pieces);
-
-    public int getX() {
-        return x;
-    };
-    public int getY() {
-        return y;
-    }
     public boolean getSide() {
-        return side;
+        return isBlack;
     }
+    public Image getImage() {
+        try {
+            if(type == ChessType.BLANK) {
+                String path = Objects.requireNonNull(this.getClass().getResource(this.imgPath + ".png"))
+                        .toExternalForm();
 
-    public void setX(int x) {
-        if(x >= 0 && x < 8) {
-            this.x = x;
-        }
-    }
-    public void setY(int y) {
-        if(y >= 0 && y < 8) {
-            this.y = y;
+                return new Image(path);
+            }
+
+
+            String color = isBlack ? "d" : "l";
+
+            String path = Objects.requireNonNull(this.getClass().getResource(this.imgPath + color + "t.png"))
+                    .toExternalForm();
+
+            return new Image(path);
+        } catch (NullPointerException e) {
+            String path = this.getClass().getResource("images/test.png").toExternalForm();
+
+            return new Image(path);
         }
     }
 }

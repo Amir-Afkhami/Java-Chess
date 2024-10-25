@@ -55,7 +55,7 @@
         <GridPane fx:id="mainGrid" prefWidth="680" prefHeight="680">
 
         </GridPane>
-        <GridPane fx:id="gameGrid" prefWidth="680" prefHeight="680">
+        <GridPane fx:id="gameGrid" prefWidth="680" prefHeight="680" >
 
         </GridPane>
     </StackPane>
