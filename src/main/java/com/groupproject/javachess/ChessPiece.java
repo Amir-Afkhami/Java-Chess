@@ -2,6 +2,7 @@ package com.groupproject.javachess;
 
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class ChessPiece {
@@ -10,7 +11,7 @@ public abstract class ChessPiece {
     protected boolean isBlack;
     protected String imgPath;
 
-    public abstract int[][] getMoves();
+    public abstract ArrayList<Integer[]> getMoves(int x, int y);
 
     public boolean getSide() {
         return isBlack;

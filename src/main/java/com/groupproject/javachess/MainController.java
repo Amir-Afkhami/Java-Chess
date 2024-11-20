@@ -39,11 +39,6 @@ public class MainController {
 
         board.setBoards(mainGrid, gameGrid);
         board.init();
-
-
-
-
-
     }
 
     @FXML

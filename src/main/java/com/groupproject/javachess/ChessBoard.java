@@ -7,10 +7,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class ChessBoard {
-    final int LENGTH = 8;
     int turns = 0;
 
     private static ChessBoard INSTANCE;
@@ -33,11 +33,20 @@ public class ChessBoard {
     }
 
     public static ChessBoard getInstance() {
-        return INSTANCE != null ? INSTANCE : new ChessBoard(new GridPane(), new GridPane());
+        if (INSTANCE != null) {
+            return INSTANCE;
+        } else {
+            INSTANCE = new ChessBoard(new GridPane(), new GridPane());
+            return INSTANCE;
+        }
     }
 
     public ChessPiece[][] getPieces() {
         return this.pieces;
+    }
+
+    public boolean inBounds(int x) {
+        return x > -1 && x < 8;
     }
 
     public void setBoards(GridPane bgBoard, GridPane gameBoard) {
@@ -56,7 +65,7 @@ public class ChessBoard {
             // Assign each cell an image
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    if((i + j) % 2 == 0) {
+                    if ((i + j) % 2 == 0) {
                         ImageView view = new ImageView(light);
                         view.setPreserveRatio(true);
                         view.setFitWidth(85);
@@ -75,6 +84,7 @@ public class ChessBoard {
             System.err.println("[ERROR] Could not retrieve images for chess board");
         }
     }
+
     private void initPieces() {
         pieces[7][0] = new Rook(false);
         pieces[7][1] = new Knight(false);
@@ -110,13 +120,12 @@ public class ChessBoard {
             for (int j = 0; j < 8; j++) {
                 ImageView img = new ImageView(pieces[i][j].getImage());
 
-
                 img.setPreserveRatio(true);
                 img.setFitWidth(85);
                 img.setFitHeight(85);
                 img.setOnMouseClicked(mouseEvent -> {
                     int column = (int) Math.floor(mouseEvent.getSceneX() / 85);
-                    int row = (int) Math.floor((mouseEvent.getSceneY() - 50) / 85) ;
+                    int row = (int) Math.floor((mouseEvent.getSceneY() - 50) / 85);
 
                     ChessBoard.getInstance().handleClick(column, row);
                 });
@@ -128,10 +137,11 @@ public class ChessBoard {
     }
 
     private void handleClick(int x, int y) {
-        int[][] moves = pieces[y][x].getMoves();
+        System.out.println("X: " + x + " Y: " + y);
+        ArrayList<Integer[]> moves = pieces[y][x].getMoves(x, y);
 
-        for (int[] move : moves) {
-            System.out.println("Column: " + move[0] + "Row: " + move[1]);
+        for (Integer[] move : moves) {
+            System.out.println("Column: " + move[0] + " Row: " + move[1]);
         }
     }
 }
