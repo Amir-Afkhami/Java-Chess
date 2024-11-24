@@ -3,12 +3,16 @@ package com.groupproject.javachess;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -16,6 +20,7 @@ import java.util.Objects;
 
 public class ChessBoard {
     private int turns = 0;
+    private boolean isEnd = false;
 
     private static ChessBoard INSTANCE;
 
@@ -136,17 +141,12 @@ public class ChessBoard {
     }
 
     private void handleClick(int x, int y) {
+        if (this.isEnd) return;
 
         if (pieces[y][x].isBlack == (turns % 2 != 0) && !(pieces[y][x] instanceof Blank)) {
-//            System.out.println("X: " + x + " Y: " + y);
             this.selectionX = x;
             this.selectionY = y;
             this.moves = pieces[y][x].getMoves(x, y);
-
-
-            moves.forEach(move -> System.out.print(" [" + move[0] + ", " + move[1] + "] "));
-
-            System.out.println("\n");
 
             this.clearHighlight();
             this.highlightBoard();
@@ -166,12 +166,11 @@ public class ChessBoard {
                     pieces[y][x] = pieces[selectionY][selectionX];
                     pieces[selectionY][selectionX] = target instanceof Blank ? target : new Blank();
 
-
                     ImageView movedImage = createImage(pieces[y][x].getImage());
                     ImageView replacementImage = createImage(pieces[selectionY][selectionX].getImage());
 
-                    gameBoard.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y);
-                    gameBoard.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == selectionX && GridPane.getRowIndex(node) == selectionY);
+                    gameBoard.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y);
+                    gameBoard.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == selectionX && GridPane.getRowIndex(node) == selectionY);
 
                     this.gameBoard.add(movedImage, x, y);
                     this.gameBoard.add(replacementImage, selectionX, selectionY);
@@ -184,9 +183,9 @@ public class ChessBoard {
 
                     this.clearHighlight();
 
-                    if(target instanceof King) {
-
-
+                    if (target instanceof King) {
+                        winPopup(!target.getSide());
+                        this.isEnd = true;
                     }
                 }
             }
@@ -230,13 +229,18 @@ public class ChessBoard {
         return img;
     }
 
-    private void printGame() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                System.out.print(pieces[i][j].type + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
+    private void winPopup(boolean side) {
+        Stage stage = (Stage) background.getScene().getWindow();
+        Popup pop = new Popup();
+
+        Label label = new Label((side ? "Black" : "White") + " won");
+
+        label.setTextFill(new Color(1, 1, 1, 1));
+        label.setStyle("-fx-font-size: 30;");
+
+        pop.getContent().add(label);
+
+        pop.show(stage);
+
     }
 }
