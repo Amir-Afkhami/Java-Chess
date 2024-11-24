@@ -39,6 +39,8 @@ public class MainController {
 
         board.setBoards(mainGrid, gameGrid);
         board.init();
+
+
     }
 
     @FXML
@@ -53,9 +55,6 @@ public class MainController {
 
         stage.setX(actionEvent.getScreenX() - deltaX);
         stage.setY(actionEvent.getScreenY() - deltaY);
-    }
-    @FXML
-    protected void onToggleSettings(ActionEvent actionEvent) {
     }
     @FXML
     protected void onMinimize(ActionEvent actionEvent) {

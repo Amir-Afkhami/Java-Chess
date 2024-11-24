@@ -21,8 +21,11 @@ public class Bishop extends ChessPiece{
         //Check top left
         int dx = -1, dy = -1;
         while(board.inBounds(x + dx) && board.inBounds(y + dy)) {
-            if(pieces[y + dy][x + dx] instanceof Blank || pieces[y + dy][x + dx].isBlack != this.isBlack) {
+            if(pieces[y + dy][x + dx] instanceof Blank) {
                 moves.add(new Integer[]{x + dx, y + dy});
+            } else if (pieces[y + dy][x + dx].isBlack != this.isBlack) {
+                moves.add(new Integer[]{x + dx, y + dy});
+                break;
             } else {
                 break;
             }
@@ -35,8 +38,11 @@ public class Bishop extends ChessPiece{
         dx = 1;
         dy = -1;
         while(board.inBounds(x + dx) && board.inBounds(y + dy)) {
-            if(pieces[y + dy][x + dx] instanceof Blank || pieces[y + dy][x + dx].isBlack != this.isBlack) {
+            if(pieces[y + dy][x + dx] instanceof Blank) {
                 moves.add(new Integer[]{x + dx, y + dy});
+            } else if (pieces[y + dy][x + dx].isBlack != this.isBlack) {
+                moves.add(new Integer[]{x + dx, y + dy});
+                break;
             } else {
                 break;
             }
@@ -49,8 +55,11 @@ public class Bishop extends ChessPiece{
         dx = 1;
         dy = 1;
         while(board.inBounds(x + dx) && board.inBounds(y + dy)) {
-            if(pieces[y + dy][x + dx] instanceof Blank || pieces[y + dy][x + dx].isBlack != this.isBlack) {
+            if(pieces[y + dy][x + dx] instanceof Blank) {
                 moves.add(new Integer[]{x + dx, y + dy});
+            } else if (pieces[y + dy][x + dx].isBlack != this.isBlack) {
+                moves.add(new Integer[]{x + dx, y + dy});
+                break;
             } else {
                 break;
             }
@@ -63,8 +72,11 @@ public class Bishop extends ChessPiece{
         dx = -1;
         dy = 1;
         while(board.inBounds(x + dx) && board.inBounds(y + dy)) {
-            if(pieces[y + dy][x + dx] instanceof Blank || pieces[y + dy][x + dx].isBlack != this.isBlack) {
+            if(pieces[y + dy][x + dx] instanceof Blank) {
                 moves.add(new Integer[]{x + dx, y + dy});
+            } else if (pieces[y + dy][x + dx].isBlack != this.isBlack) {
+                moves.add(new Integer[]{x + dx, y + dy});
+                break;
             } else {
                 break;
             }

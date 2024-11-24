@@ -1,6 +1,10 @@
 package com.groupproject.javachess;
 
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -11,15 +15,17 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ChessBoard {
-    int turns = 0;
+    private int turns = 0;
 
     private static ChessBoard INSTANCE;
 
-    GridPane background;
-    GridPane gameBoard;
-    ChessPiece[][] pieces;
+    private GridPane background;
+    private GridPane gameBoard;
+    private ChessPiece[][] pieces;
+    private int selectionX;
+    private int selectionY;
+    ArrayList<Integer[]> moves;
 
-    boolean isAI = true;
 
     private ChessBoard(GridPane bgBoard, GridPane gameBoard) {
         this.background = bgBoard;
@@ -66,20 +72,23 @@ public class ChessBoard {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     if ((i + j) % 2 == 0) {
-                        ImageView view = new ImageView(light);
-                        view.setPreserveRatio(true);
-                        view.setFitWidth(85);
-                        view.setFitHeight(85);
+                        ImageView view = createImage(walnut);
+
                         background.add(view, j, i);
                     } else {
-                        ImageView view = new ImageView(walnut);
-                        view.setPreserveRatio(true);
-                        view.setFitWidth(85);
-                        view.setFitHeight(85);
+                        ImageView view = createImage(light);
+
                         background.add(view, j, i);
                     }
                 }
             }
+
+            gameBoard.setOnMouseClicked(mouseEvent -> {
+                int column = (int) Math.floor(mouseEvent.getSceneX() / 85);
+                int row = (int) Math.floor((mouseEvent.getSceneY() - 50) / 85);
+
+                ChessBoard.getInstance().handleClick(column, row);
+            });
         } catch (NullPointerException e) {
             System.err.println("[ERROR] Could not retrieve images for chess board");
         }
@@ -89,8 +98,8 @@ public class ChessBoard {
         pieces[7][0] = new Rook(false);
         pieces[7][1] = new Knight(false);
         pieces[7][2] = new Bishop(false);
-        pieces[7][3] = new King(false);
-        pieces[7][4] = new Queen(false);
+        pieces[7][3] = new Queen(false);
+        pieces[7][4] = new King(false);
         pieces[7][5] = new Bishop(false);
         pieces[7][6] = new Knight(false);
         pieces[7][7] = new Rook(false);
@@ -98,8 +107,8 @@ public class ChessBoard {
         pieces[0][0] = new Rook(true);
         pieces[0][1] = new Knight(true);
         pieces[0][2] = new Bishop(true);
-        pieces[0][3] = new King(true);
-        pieces[0][4] = new Queen(true);
+        pieces[0][3] = new Queen(true);
+        pieces[0][4] = new King(true);
         pieces[0][5] = new Bishop(true);
         pieces[0][6] = new Knight(true);
         pieces[0][7] = new Rook(true);
@@ -110,25 +119,15 @@ public class ChessBoard {
         }
 
         for (int i = 0; i < 8; i++) {
-            pieces[2][i] = new Blank(false);
-            pieces[3][i] = new Blank(false);
-            pieces[4][i] = new Blank(false);
-            pieces[5][i] = new Blank(false);
+            pieces[2][i] = new Blank();
+            pieces[3][i] = new Blank();
+            pieces[4][i] = new Blank();
+            pieces[5][i] = new Blank();
         }
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                ImageView img = new ImageView(pieces[i][j].getImage());
-
-                img.setPreserveRatio(true);
-                img.setFitWidth(85);
-                img.setFitHeight(85);
-                img.setOnMouseClicked(mouseEvent -> {
-                    int column = (int) Math.floor(mouseEvent.getSceneX() / 85);
-                    int row = (int) Math.floor((mouseEvent.getSceneY() - 50) / 85);
-
-                    ChessBoard.getInstance().handleClick(column, row);
-                });
+                ImageView img = createImage(pieces[i][j].getImage());
 
                 gameBoard.add(img, j, i);
             }
@@ -137,11 +136,107 @@ public class ChessBoard {
     }
 
     private void handleClick(int x, int y) {
-        System.out.println("X: " + x + " Y: " + y);
-        ArrayList<Integer[]> moves = pieces[y][x].getMoves(x, y);
 
-        for (Integer[] move : moves) {
-            System.out.println("Column: " + move[0] + " Row: " + move[1]);
+        if (pieces[y][x].isBlack == (turns % 2 != 0) && !(pieces[y][x] instanceof Blank)) {
+//            System.out.println("X: " + x + " Y: " + y);
+            this.selectionX = x;
+            this.selectionY = y;
+            this.moves = pieces[y][x].getMoves(x, y);
+
+
+            moves.forEach(move -> System.out.print(" [" + move[0] + ", " + move[1] + "] "));
+
+            System.out.println("\n");
+
+            this.clearHighlight();
+            this.highlightBoard();
+        } else {
+            if (selectionX >= 0 && selectionY >= 0 && moves != null) {
+                boolean isValid = false;
+                for (Integer[] move : moves) {
+                    if (move[0] == x && move[1] == y) {
+                        isValid = true;
+                        break;
+                    }
+                }
+
+                if (isValid) {
+                    ChessPiece target = pieces[y][x];
+
+                    pieces[y][x] = pieces[selectionY][selectionX];
+                    pieces[selectionY][selectionX] = target instanceof Blank ? target : new Blank();
+
+
+                    ImageView movedImage = createImage(pieces[y][x].getImage());
+                    ImageView replacementImage = createImage(pieces[selectionY][selectionX].getImage());
+
+                    gameBoard.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == x && GridPane.getRowIndex(node) == y);
+                    gameBoard.getChildren().removeIf( node -> GridPane.getColumnIndex(node) == selectionX && GridPane.getRowIndex(node) == selectionY);
+
+                    this.gameBoard.add(movedImage, x, y);
+                    this.gameBoard.add(replacementImage, selectionX, selectionY);
+
+                    turns++;
+
+                    this.selectionX = -1;
+                    this.selectionY = -1;
+                    this.moves = null;
+
+                    this.clearHighlight();
+
+                    if(target instanceof King) {
+
+
+                    }
+                }
+            }
+
+            selectionX = -1;
+            selectionY = -1;
+            this.moves = null;
+            this.clearHighlight();
         }
+    }
+
+    private void clearHighlight() {
+        background.getChildren().forEach(node -> {
+            node.setEffect(null);
+        });
+    }
+
+    private void highlightBoard() {
+        for (Integer[] move : moves) {
+            ColorAdjust hueShift = new ColorAdjust();
+            if (pieces[move[1]][move[0]] instanceof Blank) {
+                hueShift.setHue(2);
+            } else {
+                hueShift.setHue(-0.3);
+            }
+            background.getChildren().forEach(node -> {
+                if (GridPane.getColumnIndex(node).equals(move[0]) && GridPane.getRowIndex(node).equals(move[1])) {
+                    node.setEffect(hueShift);
+                }
+            });
+        }
+    }
+
+    public static ImageView createImage(Image image) {
+        ImageView img = new ImageView(image);
+
+        img.setPreserveRatio(true);
+        img.setFitWidth(85);
+        img.setFitHeight(85);
+
+        return img;
+    }
+
+    private void printGame() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                System.out.print(pieces[i][j].type + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
     }
 }

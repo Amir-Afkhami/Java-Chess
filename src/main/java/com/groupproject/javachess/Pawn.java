@@ -24,7 +24,7 @@ public class Pawn extends ChessPiece {
             if(board.inBounds(y + 1) && pieces[y + 1][x] instanceof Blank) {
                 moves.add(new Integer[]{x, y + 1});
 
-                if (y == 1)
+                if (y == 1 && pieces[y + 2][x] instanceof Blank)
                     moves.add(new Integer[]{x, y + 2});
             }
 
@@ -41,7 +41,7 @@ public class Pawn extends ChessPiece {
             if (board.inBounds(y - 1) && pieces[y - 1][x] instanceof Blank) {
                 moves.add(new Integer[]{x, y - 1});
 
-                if (y == 6)
+                if (y == 6 && pieces[y - 2][x] instanceof Blank)
                     moves.add(new Integer[]{x, y - 2});
             }
 

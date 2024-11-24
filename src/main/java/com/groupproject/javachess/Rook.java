@@ -22,30 +22,39 @@ public class Rook extends ChessPiece {
         for (int i = y - 1; i >= 0; i--) {
             if (!board.inBounds(i)) break;
 
-            if (pieces[i][x] instanceof Blank || pieces[i][x].isBlack != this.isBlack) {
+            if (pieces[i][x] instanceof Blank) {
                 moves.add(new Integer[]{x, i});
+            } else if (pieces[i][x].isBlack != this.isBlack) {
+                moves.add(new Integer[]{x, i});
+                break;
             } else {
                 break;
             }
         }
 
         // Check Right
-        for (int i = x + 1; i >= 0; i++) {
+        for (int i = x + 1; i < 8; i++) {
             if (!board.inBounds(i)) break;
 
-            if (pieces[y][i] instanceof Blank || pieces[y][i].isBlack != this.isBlack) {
+            if (pieces[y][i] instanceof Blank) {
                 moves.add(new Integer[]{i, y});
+            } else if (pieces[y][i].isBlack != this.isBlack) {
+                moves.add(new Integer[]{i, y});
+                break;
             } else {
                 break;
             }
         }
 
         // Check Bottom
-        for (int i = y + 1; i >= 0; i++) {
+        for (int i = y + 1; i < 8; i++) {
             if (!board.inBounds(i)) break;
 
-            if (pieces[i][x] instanceof Blank || pieces[i][x].isBlack != this.isBlack) {
+            if (pieces[i][x] instanceof Blank) {
                 moves.add(new Integer[]{x, i});
+            } else if (pieces[i][x].isBlack != this.isBlack) {
+                moves.add(new Integer[]{x, i});
+                break;
             } else {
                 break;
             }
@@ -55,8 +64,11 @@ public class Rook extends ChessPiece {
         for (int i = x - 1; i >= 0; i--) {
             if (!board.inBounds(i)) break;
 
-            if (pieces[y][i] instanceof Blank || pieces[y][i].isBlack != this.isBlack) {
+            if (pieces[y][i] instanceof Blank) {
                 moves.add(new Integer[]{i, y});
+            } else if (pieces[y][i].isBlack != this.isBlack) {
+                moves.add(new Integer[]{i, y});
+                break;
             } else {
                 break;
             }

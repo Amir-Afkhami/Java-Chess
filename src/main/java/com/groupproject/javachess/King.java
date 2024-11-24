@@ -18,103 +18,84 @@ public class King extends ChessPiece {
 
         ArrayList<Integer[]> moves = new ArrayList<>();
 
-        //Check top left
-        int dx = -1, dy = -1;
-        while(board.inBounds(x + dx) && board.inBounds(y + dy)) {
-            if(pieces[y + dy][x + dx] instanceof Blank || pieces[y + dy][x + dx].isBlack != this.isBlack) {
-                moves.add(new Integer[]{x + dx, y + dy});
-            } else {
-                break;
-            }
-
-            dx--;
-            dy--;
+        /*
+            xoo
+            o o
+            ooo
+         */
+        if (board.inBounds(x - 1) && board.inBounds(y - 1) &&
+                (pieces[y - 1][x - 1] instanceof Blank || pieces[y - 1][x - 1].isBlack != this.isBlack)) {
+            moves.add(new Integer[]{x - 1, y - 1});
         }
 
-        //Check top right
-        dx = 1;
-        dy = -1;
-        while(board.inBounds(x + dx) && board.inBounds(y + dy)) {
-            if(pieces[y + dy][x + dx] instanceof Blank || pieces[y + dy][x + dx].isBlack != this.isBlack) {
-                moves.add(new Integer[]{x + dx, y + dy});
-            } else {
-                break;
-            }
-
-            dx++;
-            dy--;
+        /*
+            oxo
+            o o
+            ooo
+         */
+        if (board.inBounds(y - 1) &&
+                (pieces[y - 1][x] instanceof Blank || pieces[y - 1][x].isBlack != this.isBlack)) {
+            moves.add(new Integer[]{x, y - 1});
         }
 
-        //Check bottom right
-        dx = 1;
-        dy = 1;
-        while(board.inBounds(x + dx) && board.inBounds(y + dy)) {
-            if(pieces[y + dy][x + dx] instanceof Blank || pieces[y + dy][x + dx].isBlack != this.isBlack) {
-                moves.add(new Integer[]{x + dx, y + dy});
-            } else {
-                break;
-            }
-
-            dx++;
-            dy++;
+        /*
+            oox
+            o o
+            ooo
+         */
+        if (board.inBounds(x + 1) && board.inBounds(y - 1) &&
+                (pieces[y - 1][x + 1] instanceof Blank || pieces[y - 1][x + 1].isBlack != this.isBlack)) {
+            moves.add(new Integer[]{x + 1, y - 1});
         }
 
-        //Check top right
-        dx = -1;
-        dy = 1;
-        while(board.inBounds(x + dx) && board.inBounds(y + dy)) {
-            if(pieces[y + dy][x + dx] instanceof Blank || pieces[y + dy][x + dx].isBlack != this.isBlack) {
-                moves.add(new Integer[]{x + dx, y + dy});
-            } else {
-                break;
-            }
-
-            dx--;
-            dy++;
+        /*
+            ooo
+            o x
+            ooo
+         */
+        if (board.inBounds(x + 1) &&
+                (pieces[y][x + 1] instanceof Blank || pieces[y][x + 1].isBlack != this.isBlack)) {
+            moves.add(new Integer[]{x + 1, y});
         }
 
-        // Check Above
-        for (int i = y - 1; i >= 0; i--) {
-            if (!board.inBounds(i)) break;
-
-            if (pieces[i][x] instanceof Blank || pieces[i][x].isBlack != this.isBlack) {
-                moves.add(new Integer[]{x, i});
-            } else {
-                break;
-            }
+        /*
+            ooo
+            o o
+            oox
+         */
+        if (board.inBounds(x + 1) && board.inBounds(y + 1) &&
+                (pieces[y + 1][x + 1] instanceof Blank || pieces[y + 1][x + 1].isBlack != this.isBlack)) {
+            moves.add(new Integer[]{x + 1, y + 1});
         }
 
-        // Check Right
-        for (int i = x + 1; i >= 0; i++) {
-            if (!board.inBounds(i)) break;
-
-            if (pieces[y][i] instanceof Blank || pieces[y][i].isBlack != this.isBlack) {
-                moves.add(new Integer[]{i, y});
-            } else {
-                break;
-            }
+        /*
+            ooo
+            o o
+            oxo
+         */
+        if (board.inBounds(y + 1) &&
+                (pieces[y + 1][x] instanceof Blank || pieces[y + 1][x].isBlack != this.isBlack)) {
+            moves.add(new Integer[]{x, y + 1});
         }
 
-        // Check Bottom
-        for (int i = y + 1; i >= 0; i++) {
-            if (!board.inBounds(i)) break;
-
-            if (pieces[i][x] instanceof Blank || pieces[i][x].isBlack != this.isBlack) {
-                moves.add(new Integer[]{x, i});
-            } else {
-                break;
-            }
+        /*
+            ooo
+            o o
+            xoo
+         */
+        if (board.inBounds(x - 1) && board.inBounds(y + 1) &&
+                (pieces[y + 1][x - 1] instanceof Blank || pieces[y + 1][x - 1].isBlack != this.isBlack)) {
+            moves.add(new Integer[]{x - 1, y + 1});
         }
 
-        // Check Left
-        for (int i = x - 1; i >= 0; i--) {
-            if (!board.inBounds(i)) break;
-
-            if (pieces[y][i] instanceof Blank || pieces[y][i].isBlack != this.isBlack) {
-                moves.add(new Integer[]{i, y});
-            } else {
-                break;
-            }
+        /*
+            ooo
+            x o
+            ooo
+         */
+        if (board.inBounds(x - 1) &&
+                (pieces[y][x - 1] instanceof Blank || pieces[y][x - 1].isBlack != this.isBlack)) {
+            moves.add(new Integer[]{x - 1, y});
         }
 
         return moves;
