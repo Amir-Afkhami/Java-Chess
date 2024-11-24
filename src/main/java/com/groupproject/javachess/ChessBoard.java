@@ -1,17 +1,11 @@
 package com.groupproject.javachess;
 
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 

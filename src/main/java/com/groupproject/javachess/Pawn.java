@@ -29,7 +29,7 @@ public class Pawn extends ChessPiece {
             }
 
             //Check right flank
-            if(board.inBounds(y + 1) && !(pieces[y + 1][x + 1] instanceof Blank) && pieces[y + 1][x + 1].isBlack != this.isBlack) {
+            if(board.inBounds(x + 1) && !(pieces[y + 1][x + 1] instanceof Blank) && pieces[y + 1][x + 1].isBlack != this.isBlack) {
                 moves.add(new Integer[]{x + 1, y + 1});
             }
             //Check left flank
